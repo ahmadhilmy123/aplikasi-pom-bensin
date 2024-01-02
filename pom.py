@@ -61,10 +61,12 @@ class PengisianBensinApp:
             return 12000  
         elif jenis_bensin == "Pertamax Turbo":
             return 15000  
+        
+
 
 if __name__ == "__main__": 
     root = tk.Tk()
-    root.geometry("500x500")
+    root.geometry("400x300+500+200")
     root.configure(bg="#e6e6e6")    
     app = PengisianBensinApp(root)
     root.mainloop()
