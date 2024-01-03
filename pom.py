@@ -1,18 +1,22 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 
 class PengisianBensinApp:
     def __init__(self, master):
         self.master = master
         self.master.title("Aplikasi Pengisian Pom Bensin")
 
+        self.master.configure(bg="#1e90ff")
+
         # Frame utama
         self.main_frame = ttk.Frame(master, padding="60")
-        self.main_frame.grid(row=0, column=0, padx=500, pady=30)
+        self.main_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
         # Header
         self.header_label = ttk.Label(self.main_frame, text="Pengisian Pom Bensin", font=("Helvetica", 16, "bold"))
         self.header_label.grid(row=0, column=0, columnspan=2, pady=(0, 10))
+
+
 
         # Gambar
         self.image = tk.PhotoImage(file="pom.png")
@@ -47,11 +51,17 @@ class PengisianBensinApp:
     def hitung_biaya(self):
         try:
             liter = float(self.entry_liter.get())
+            if liter <= 0:
+                raise ValueError("Jumlah liter harus lebih dari 0")
+            
             harga_per_liter = self.get_harga_per_liter()
             total_biaya = liter * harga_per_liter
             self.label_total_biaya.config(text=f"Total Biaya: Rp {total_biaya:.2f}")
-        except ValueError:
-            self.label_total_biaya.config(text="Masukkan jumlah liter yang valid!")
+
+            # Tampilkan pop-up informasi
+            self.tampilkan_popup_informasi(f"Biaya pengisian untuk {self.jenis_bensin.get()} sebanyak {liter:.2f} liter adalah Rp {total_biaya:.2f}")
+        except ValueError as e:
+            messagebox.showerror("Error", str(e))
 
     def get_harga_per_liter(self):
         jenis_bensin = self.jenis_bensin.get()
@@ -61,12 +71,14 @@ class PengisianBensinApp:
             return 12000  
         elif jenis_bensin == "Pertamax Turbo":
             return 15000  
-        
+
+    def tampilkan_popup_informasi(self, pesan):
+        messagebox.showinfo("Informasi", pesan)
 
 
 if __name__ == "__main__": 
     root = tk.Tk()
-    root.geometry("400x300+500+200")
-    root.configure(bg="#e6e6e6")    
+    root.geometry("500x600+500+50")  
+    
     app = PengisianBensinApp(root)
     root.mainloop()
